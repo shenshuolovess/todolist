@@ -27,7 +27,7 @@ const asyncWriteFile = function (string, path) {
   })
 }
 
-const getAllAccounts = (req, res) => fs.readFile('./data.json','utf-8',(err,data)=>{
+const getAllTasks = (req, res) => fs.readFile('./data.json','utf-8',(err,data)=>{
     if(err){
     res.status(500).send()
 }else{
@@ -35,43 +35,43 @@ const getAllAccounts = (req, res) => fs.readFile('./data.json','utf-8',(err,data
 }
 })
 
-const createAccount = async (req, res) => {
-  const newAccount = req.body
+const createTask = async (req, res) => {
+  const newTask = req.body
   const file = await asyncReadFile('./data.json')
-  const accounts = JSON.parse(file)
-  if (accounts.filter(v => v.id === newAccount.id).length != 0) {
+  const tasks = JSON.parse(file)
+  if (tasks.filter(v => v.id === newTask.id).length != 0) {
     res.status(400).send()
   } else {
-    accounts.push(newAccount)
-    await asyncWriteFile(JSON.stringify(accounts), './data.json')
-    res.status(201).send(accounts)
+    tasks.push(newTask)
+    await asyncWriteFile(JSON.stringify(tasks), './data.json')
+    res.status(201).send(tasks)
   }
 }
 
-const getAccount = async (req, res) => {
+const getTask = async (req, res) => {
   const Id = req.params.id
   const file = await asyncReadFile('./data.json')
-  const accounts = JSON.parse(file).filter(v => v.id == Id)
-  accounts.length == 0 ? res.status(404).send() : res.send(accounts[0])
+  const tasks = JSON.parse(file).filter(v => v.id == Id)
+  tasks.length == 0 ? res.status(404).send() : res.send(tasks[0])
 }
 
-const deleteAccount = async (req, res) => {
+const deleteTask = async (req, res) => {
   const Id = req.params.id
   const file = await asyncReadFile('./data.json')
-  const accounts = JSON.parse(file)
-  const newAccounts = accounts.filter(v => v.id != Id)
-  console.log(newAccounts)
-  if (newAccounts.length === accounts.length) {
+  const tasks = JSON.parse(file)
+  const newTasks = tasks.filter(v => v.id != Id)
+  console.log(newTasks)
+  if (newTasks.length === tasks.length) {
     res.status(404).send()
   } else {
-    await asyncWriteFile(JSON.stringify(newAccounts), './data.json')
+    await asyncWriteFile(JSON.stringify(newTasks), './data.json')
     res.status(204).send()
   }
 }
-app.get('/api/tasks/', getAllAccounts)
-app.post('/api/tasks/',createAccount)
-app.get('/api/tasks/:id', getAccount)
-app.delete("/api/tasks/:id", deleteAccount)
+app.get('/api/tasks/', getAllTasks)
+app.post('/api/tasks/',createTask)
+app.get('/api/tasks/:id', getTask)
+app.delete("/api/tasks/:id", deleteTask)
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
