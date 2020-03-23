@@ -1,2 +1,2 @@
 使用node框架，构建一个Restful API
-�ܹ����Todo list��һЩ����
+能够完成Todo list的一些功能
